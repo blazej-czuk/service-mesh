@@ -1,0 +1,38 @@
+# IP 130.61.171.85
+# apt install bat
+# echo "alias bat='batcat'" >> ~/.bashrc
+
+# iptables -F
+# iptables --table nat --append OUTPUT --destination localhost --protocol udp --match udp --dport 53 --jump REDIRECT --to-ports 8600
+# iptables --table nat --append OUTPUT --destination localhost --protocol tcp --match tcp --dport 53 --jump REDIRECT --to-ports 8600
+# iptables -I INPUT -p tcp --dport 8302 -j ACCEPT
+# iptables -I INPUT -p udp --dport 8302 -j ACCEPT
+# iptables -I INPUT -p udp --dport 51822 -j ACCEPT
+
+
+docker_enabled: "yes"
+
+## SSH ##
+ssh_config_enabled: "yes"
+
+
+## DOCKER-COMPOSE ##
+docker_compose_enabled: "yes"
+docker_compose_config:
+  - name: traefik
+  - name: authelia
+  - name: dashy
+
+
+consul_local_service_enabled: "yes"
+consul_dns_enabled: "yes" # allow run playbook consul
+consul_dns_ip: 127.0.0.1
+consul_dns_template: resolve.j2
+consul_dns_domain: consul
+
+consul_services:
+  - name: dashy
+    service_address: 172.20.0.4
+    service_port: 80
+
+
