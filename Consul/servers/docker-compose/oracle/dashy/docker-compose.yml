@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    container_name: dashy
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./config.yml:/app/public/conf.yml
+    networks:
+    - dmz
+    restart: always
+    labels:
+      traefik.enable: true
+      traefik.http.routers.dashy-http.entrypoints: http
+      traefik.http.routers.dashy-http.rule: Host(`dashy.oracle.your-domain.xd`)
+      traefik.http.routers.dashy-http.middlewares: redirect-to-https
+      traefik.http.routers.dashy-https.rule: Host(`dashy.oracle.your-domain.xd`)
+      traefik.http.routers.dashy-https.entrypoints: https
+      traefik.http.routers.dashy-https.middlewares: authelia
+      traefik.http.routers.dashy-https.tls.certresolver: letsencrypt
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: fluentd
+
+networks:
+  dmz:
+    external: true

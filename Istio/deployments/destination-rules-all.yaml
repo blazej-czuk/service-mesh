@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: dron1
+spec:
+  host: dron1
+  subsets:
+  - name: d1
+    labels:
+      app: dron1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: dron2
+spec:
+  host: dron2
+  subsets:
+  - name: d2
+    labels:
+      app: dron2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: dron3
+spec:
+  host: dron3
+  subsets:
+  - name: d3
+    labels:
+      app: dron3
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: dron4
+spec:
+  host: dron4
+  subsets:
+  - name: d4
+    labels:
+      app: dron4

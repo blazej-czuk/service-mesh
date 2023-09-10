@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dron1
+spec:
+  hosts:
+  - dron1
+  http:
+  - route:
+    - destination:
+        host: dron1
+        subset: d1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dron2
+spec:
+  hosts:
+  - dron2
+  http:
+  - route:
+    - destination:
+        host: dron2
+        subset: d2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dron3
+spec:
+  hosts:
+  - dron3
+  http:
+  - route:
+    - destination:
+        host: dron3
+        subset: d3
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dron4
+spec:
+  hosts:
+  - dron4
+  http:
+  - route:
+    - destination:
+        host: dron4
+        subset: d4

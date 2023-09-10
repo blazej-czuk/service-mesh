@@ -1,0 +1,16 @@
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "AuthorizationPolicy"
+metadata:
+  name: "policy1"
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: dron3
+  action: DENY    
+  rules:
+  - when:
+    - key: request.headers[dron]
+      values: 
+        - dron2

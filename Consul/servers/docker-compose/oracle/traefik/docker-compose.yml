@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+
+  traefik:
+    image: traefik:v2.9.9
+    container_name: traefik
+    command: --configFile=/etc/traefik/static_conf.yml
+    networks: 
+      - dmz
+      - elk
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik-dashboard.rule: "Host(`traefik.oracle.your-domain.xd`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      traefik.http.routers.traefik-dashboard.middlewares: authelia
+      traefik.http.routers.traefik-dashboard.service: api@internal
+      traefik.http.routers.traefik-dashboard.tls.certresolver: letsencrypt
+      traefik.http.middlewares.authelia.forwardAuth.address: http://authelia:9091/api/verify?rd=https%3A%2F%2Fauth.oracle.your-domain.xd%2F
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
+      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
+      traefik.http.middlewares.authelia-basic.forwardAuth.address: http://authelia:9091/api/verify?auth=basic
+      traefik.http.middlewares.authelia-basic.forwardAuth.trustForwardHeader: true
+      traefik.http.middlewares.authelia-basic.forwardAuth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
+      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./acme:/etc/traefik/acme
+      - ./static_conf.yml:/etc/traefik/static_conf.yml
+      - ./dynamic_conf.yml:/etc/traefik/dynamic_conf.yml
+    logging:
+      driver: fluentd
+
+networks:
+  dmz:
+    external: true
+  elk:
+    external: true

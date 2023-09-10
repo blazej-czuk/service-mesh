@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mirror-http-gateway-service
+spec:
+  hosts:
+    - "mirror.kube.home"
+  gateways:
+    - http-gateway
+  http:
+  - match:
+    route:
+    - destination:
+        host: dron1
+        port:
+          number: 3001
+    mirror:
+      host: dron2
+      port:
+        number: 3001
+    mirrorPercentage:
+      value: 100.0
+
+      

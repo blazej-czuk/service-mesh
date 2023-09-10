@@ -1,0 +1,10 @@
+http:
+  services:
+    consul:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.151.169:8500/"
+    vault:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.151.169:8200"

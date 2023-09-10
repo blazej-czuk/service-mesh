@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+
+  dron1:
+   build:
+    context: ./
+    dockerfile: dockerfile
+   container_name: dron1
+   environment:
+    - NAME=dron1
+    - BG_COLOR=red
+    - DRONES=dron2,dron3,dron4
+   ports:
+    - 5051:3000
+
+  dron2:
+   build:
+    context: ./
+    dockerfile: dockerfile
+   container_name: dron2
+   environment:
+    - NAME=dron2
+    - BG_COLOR=green
+    - DRONES=dron1,dron3,dron4
+   ports:
+    - 5052:3000
+
+  dron3:
+   build:
+    context: ./
+    dockerfile: dockerfile
+   container_name: dron3
+   environment:
+    - NAME=dron3
+    - BG_COLOR=blue
+    - DRONES=dron1,dron2,dron4
+   ports:
+    - 5053:3000
+
+  dron4:
+   build:
+    context: ./
+    dockerfile: dockerfile
+   container_name: dron4
+   environment:
+    - NAME=dron4
+    - BG_COLOR=yellow
+    - DRONES=dron1,dron2,dron3
+   ports:
+    - 5054:3000 
+

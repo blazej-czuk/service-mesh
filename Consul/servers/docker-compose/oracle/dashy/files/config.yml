@@ -1,0 +1,12 @@
+pageInfo:
+  title: Błażej Apps
+sections: # An array of sections
+- name: linode1 server
+  items:
+  - title: Consul
+    icon: si-consul
+    url: https://consul.linode1.your-domain.xd/ui/
+
+  - title: pgAdmin
+    icon: si-postgresql
+    url: https://pgadmin.linode1.your-domain.xd/login?next=%2F

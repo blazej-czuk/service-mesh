@@ -1,0 +1,60 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: http-gateway-service
+spec:
+  hosts:
+    - "kube.home"
+  gateways:
+    - http-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /dron1/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: dron1
+        port:
+          number: 3001
+  # - match:
+  #   - uri:
+  #       prefix: /dron2/
+  #   rewrite:
+  #     uri: "/"
+  #   route:
+  #   - destination:
+  #       host: dron2
+  #       port:
+  #         number: 3001
+  # - match:
+  #   - uri:
+  #       prefix: /dron3/
+  #   rewrite:
+  #     uri: "/"
+  #   route:
+  #   - destination:
+  #       host: dron3
+  #       port:
+  #         number: 3000
+  # - match:
+  #   - uri:
+  #       prefix: /dron4/
+  #   rewrite:
+  #     uri: "/"
+  #   route:
+  #   - destination:
+  #       host: dron4
+  #       port:
+  #         number: 3000
+  # - match:
+  #   - uri:
+  #       prefix: /dron5/
+  #   rewrite:
+  #     uri: "/"
+  #   route:
+  #   - destination:
+  #       host: dron5
+  #       port:
+  #         number: 3000

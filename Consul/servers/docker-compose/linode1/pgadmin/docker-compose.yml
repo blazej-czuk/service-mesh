@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: blazej.czuk@outlook.com
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_ADDRESS: 0.0.0.0
+    labels:
+      traefik.enable: true
+      traefik.http.routers.pgadmin-http.entrypoints: http
+      traefik.http.routers.pgadmin-http.rule: Host(`pgadmin.linode1.your-domain.xd`)
+      traefik.http.routers.pgadmin-http.middlewares: redirect-to-https
+      traefik.http.routers.pgadmin-https.rule: Host(`pgadmin.linode1.your-domain.xd`)
+      traefik.http.routers.pgadmin-https.entrypoints: https
+      #traefik.http.routers.pgadmin-https.middlewares: authelia
+      traefik.http.routers.pgadmin-https.tls.certresolver: letsencrypt
+    networks:
+      dc1:
+        ipv4_address: 10.5.0.11
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+  pgadmin-envoy:
+    image: consul-envoy
+    container_name: pgadmin-envoy
+    environment:
+      CONSUL_HTTP_ADDR: 10.5.0.2:8500
+      CONSUL_GRPC_ADDR: 10.5.0.2:8502
+      SERVICE_CONFIG: /config/pgadmin.hcl
+      CENTRAL_CONFIG: "/central_config/pgadmin_defaults.hcl"
+    command: ["consul", "connect", "envoy", "-sidecar-for", "pgadmin-id", "-admin-bind", "0.0.0.0:8001" ]
+    volumes:
+      - ./service_config:/config
+      - ./central_config:/central_config
+    network_mode: "service:pgadmin"
+networks:
+  dc1:
+    external: true
+volumes:
+  pgadmin:
+    name: pgadmin
+
+
+      
+        

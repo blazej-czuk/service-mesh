@@ -1,0 +1,42 @@
+# curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
+# apt install gron
+# apt install jq
+# sudo apt-get install build-essential procps curl file git
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/bczuk/.profile
+# brew install lazydocker
+
+docker_enabled: "yes"
+docker_compose_enabled: "yes"
+
+docker_compose_config:
+  # - name: traefik
+  # - name: vault
+    # mkdir data logs file
+    # chown -R root:1000 data logs file
+    # chmod -R g+w data logs file
+  # - name: envoy
+  - name: postgres
+    envs:
+      POSTGRES_PASSWORD: "{{ vault_postgres_default_password }}"
+  - name: pgadmin
+    envs: 
+      PGADMIN_DEFAULT_PASSWORD: "{{ vault_pgadmin_default_password }}"
+  - name: consul-server
+  # - name: dockerfiles
+  # - name: jeager
+  #- name: wireguard
+  
+consul_local_service_enabled: "no"
+consul_dns_enabled: "yes" # allow run playbook consul
+consul_dns_ip: 192.168.151.169
+consul_dns_template: resolve-new.j2
+consul_dns_domain: consul
+
+consul_services:
+  - name: service.j2
+    dest: /etc/consul.d/dashy.hcl
+    service: dashy
+    service_address: 172.20.0.4
+    service_port: 80
+    notify: consul restart

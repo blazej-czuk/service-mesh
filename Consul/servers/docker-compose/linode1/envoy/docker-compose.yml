@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.24-latest
+    container_name: envoy
+    volumes:
+      - ./envoy.yaml:/etc/envoy.yaml
+    command: ["/usr/local/bin/envoy", "-c", "/etc/envoy.yaml"]
+    networks:
+      dc1:
+        ipv4_address: 10.5.0.100
+networks:
+  dc1:
+    external: true

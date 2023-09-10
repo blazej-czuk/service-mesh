@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: loadbalancing-http-gateway-service
+spec:
+  hosts:
+    - "loadbalancing.kube.home"
+  gateways:
+    - http-gateway
+  http:
+  - match:
+    route:
+    - destination:
+        host: dron1
+        port:
+          number: 3001
+      weight: 50
+    - destination:
+        host: dron2
+        port:
+          number: 3001
+      weight: 50
